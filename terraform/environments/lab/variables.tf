@@ -33,3 +33,41 @@ variable "app_repo_name" {
   type        = string
   default     = "cloud-native-app"
 }
+
+variable "kubernetes_version" {
+  description = "EKS Kubernetes version."
+  type        = string
+  default     = "1.36"
+}
+
+variable "public_access_cidrs" {
+  description = "Your public IP as x.x.x.x/32. Allowed to reach the Kubernetes API."
+  type        = list(string)
+}
+
+variable "node_instance_types" {
+  description = "Worker node instance types."
+  type        = list(string)
+  default     = ["t3.medium"]
+}
+
+variable "node_desired_size" {
+  type    = number
+  default = 2
+}
+
+variable "node_min_size" {
+  type    = number
+  default = 1
+}
+
+variable "node_max_size" {
+  type    = number
+  default = 3
+}
+
+variable "cluster_log_types" {
+  description = "Control plane log types. Use [] to disable and save cost."
+  type        = list(string)
+  default     = ["api", "audit", "authenticator"]
+}
