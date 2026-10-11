@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod
+  labels:
+    app.kubernetes.io/part-of: portfolio
+    environment: prod
+    # Pod Security Standards: pods must run as non-root, drop capabilities,
+    # use the default seccomp profile and block privilege escalation.
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: prod
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 2Gi
+    limits.cpu: "2"
+    limits.memory: 4Gi
+    pods: "20"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: container-defaults
+  namespace: prod
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 100m
+        memory: 256Mi
+      default:
+        cpu: 500m
+        memory: 512Mi
+      max:
+        cpu: "1"
+        memory: 1Gi
+---
+# Pods only get a Kubernetes API token if they ask for one explicitly.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: default
+  namespace: prod
+automountServiceAccountToken: false
+---
+# Deny all incoming traffic by default. The Helm chart adds explicit allow rules.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: prod
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
