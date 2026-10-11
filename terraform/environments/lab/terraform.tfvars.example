@@ -1,0 +1,4 @@
+aws_region         = "ap-south-1"
+project            = "portfolio"
+cluster_name       = "portfolio-lab"
+enable_nat_gateway = false # set true in Phase 3 (costs about $0.045/hour)
