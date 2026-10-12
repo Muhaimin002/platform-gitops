@@ -1,0 +1,38 @@
+# Lab-sized Argo CD. No secrets in this file.
+global:
+  domain: argocd.local
+
+dex:
+  enabled: false
+
+notifications:
+  enabled: false # added in a later phase
+
+controller:
+  replicas: 1
+  resources:
+    requests: { cpu: 250m, memory: 512Mi }
+    limits:   { cpu: "1",  memory: 1Gi }
+
+server:
+  replicas: 1
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits:   { cpu: 500m, memory: 256Mi }
+
+repoServer:
+  replicas: 1
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits:   { cpu: 500m, memory: 512Mi }
+
+applicationSet:
+  replicas: 1
+  resources:
+    requests: { cpu: 50m,  memory: 128Mi }
+    limits:   { cpu: 250m, memory: 256Mi }
+
+redis:
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits:   { cpu: 250m, memory: 128Mi }
