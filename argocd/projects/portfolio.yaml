@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: portfolio
+  namespace: argocd
+spec:
+  description: Portfolio lab applications (dev, uat, prod namespaces)
+  sourceRepos:
+    - git@github.com:Muhaimin002/platform-gitops.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: dev
+    - server: https://kubernetes.default.svc
+      namespace: uat
+    - server: https://kubernetes.default.svc
+      namespace: prod
+  # No cluster-scoped resources (namespaces and CRDs are managed elsewhere)
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - { group: "",                   kind: Service }
+    - { group: "",                   kind: ServiceAccount }
+    - { group: "",                   kind: ConfigMap }
+    - { group: apps,                 kind: Deployment }
+    - { group: argoproj.io,          kind: Rollout }
+    - { group: argoproj.io,          kind: AnalysisTemplate }
+    - { group: autoscaling,          kind: HorizontalPodAutoscaler }
+    - { group: policy,               kind: PodDisruptionBudget }
+    - { group: networking.k8s.io,    kind: NetworkPolicy }
+    - { group: networking.k8s.io,    kind: Ingress }
+    - { group: monitoring.coreos.com, kind: ServiceMonitor }
+    - { group: monitoring.coreos.com, kind: PrometheusRule }
