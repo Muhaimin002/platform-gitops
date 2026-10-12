@@ -1,0 +1,43 @@
+environment: dev
+replicaCount: 1
+
+image:
+  repository: 988710971470.dkr.ecr.ap-south-1.amazonaws.com/cloud-native-app
+  digest: ""        # immutable reference, preferred: sha256:...
+  tag: ""           # fallback if digest is empty
+  pullPolicy: IfNotPresent
+
+# Non-sensitive settings only. Secrets never go here.
+config:
+  APP_ENVIRONMENT: dev
+
+service:
+  port: 80
+
+resources:
+  requests: { cpu: 100m, memory: 256Mi }
+  limits:   { cpu: 500m, memory: 640Mi }
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 75
+
+pdb:
+  enabled: false
+
+networkPolicy:
+  enabled: true
+  allowedNamespaces:
+    - ingress-nginx
+    - monitoring
+
+ingress:
+  enabled: false
+  className: nginx
+  host: ""
+
+monitoring:
+  serviceMonitor:
+    enabled: false   # needs the Prometheus Operator CRDs (Phase 7)

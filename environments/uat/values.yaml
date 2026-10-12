@@ -1,0 +1,6 @@
+environment: uat
+replicaCount: 1
+image:
+  digest: sha256:31d9793173c346741974d0116a0d72dc7d665340105741aba0715bf0cdddf058
+config:
+  APP_ENVIRONMENT: uat
